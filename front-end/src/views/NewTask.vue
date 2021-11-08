@@ -11,7 +11,10 @@
               <span>of these filters match</span>
           </div>
           <div class="mt-2 ps-3 pt-3 pb-3 border">
-            <new-rule v-for="(item, index) in rule_count" v-bind:key="index" v-on:remove-rule="removeRule(index)" class="mb-2"/>
+            <new-rule v-for="(item, index) in rules"
+                      :key="JSON.stringify(index)" v-on:remove-rule="removeRule(index)"
+                      :data="item" :index="index" v-on:data-changed="dataChanged"
+                      class="mb-2"/>
             <div class="mt-2 add-rule-div">
               <button class="btn add-rule-btn" v-on:click="addRule">+</button>
             </div>
@@ -21,9 +24,9 @@
 </template>
 
 <script>
-  import Rule from '@/components/rule'
+import Rule from '@/components/rule'
 
-  export default {
+export default {
     name: "NewTask",
     components: {
       'new-rule': Rule
@@ -31,22 +34,31 @@
     data: function () {
       return {
         if_condition: 'ALL',
-        rule_count: []
+        rules: []
       }
     },
-    methods: {
+  methods: {
+      dataChanged(data) {
+        const rules = this.rules;
+        const index = data.index;
+        delete data['index'];
+        rules.splice(index, 1, data)
+        this.rules = rules;
+      },
       removeRule(index) {
-        console.log(this.rule_count)
-        console.log(index)
-        this.rule_count.splice(index - 1, 1)
+        const rules = this.rules;
+        rules.splice(index, 1)
+        this.rules = rules
       },
       addRule() {
-        const rule_count = this.rule_count
-        if (rule_count.length === 0) {
-          this.rule_count.push(0)
-        } else {
-          this.rule_count.push(rule_count[rule_count.length - 1] + 1)
+        const new_rule = {
+          type_input_text: null,
+          type_input_show: null,
+          rule_input_text: null,
+          rule_input_show: null,
         }
+        this.rules.push(new_rule)
+        console.log(this.rules)
       }
     }
   }
