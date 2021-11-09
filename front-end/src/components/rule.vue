@@ -44,6 +44,8 @@ export default {
     }
   },
   beforeMount() {
+    // Check data object for data provided by the parent
+    // If data is not provided, set default values
     this.id = this.data.id;
     if (this.data.type_select) {
       this.type_select = this.data.type_select
@@ -62,6 +64,9 @@ export default {
   },
   methods: {
     dataChanged() {
+      /*
+      * Emit updated data to parent
+      */
       const new_data = {
         index: this.index,
         id: this.id,
@@ -73,11 +78,23 @@ export default {
       this.$emit('data-changed', new_data)
     },
     checkTypeSelect() {
+      /*
+      * Checks if the new type is equal to HTML
+      * and if it's not, show the input field.
+      * We do this because the HTML refers to the
+      * hole html and does not need an input field.
+      */
       const type_select = this.type_select;
       this.type_input_show = type_select !== 'HTML';
       this.dataChanged()
     },
     checkRuleSelect() {
+      /*
+      * Checks if the new rule is equal to EXISTS
+      * and if it's not, show the input field.
+      * We do this because the EXISTS does not
+      * need an input field.
+      */
       const rule_select = this.rule_select;
       this.rule_input_show = rule_select !== 'EXISTS';
       this.dataChanged()
