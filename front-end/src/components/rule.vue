@@ -33,6 +33,7 @@ export default {
   },
   data: function () {
     return {
+      id: null,
       type_select: 'HTML',
       type_input_text: '',
       rule_select: 'CONTAINS',
@@ -43,6 +44,7 @@ export default {
     }
   },
   beforeMount() {
+    this.id = this.data.id;
     if (this.data.type_select) {
       this.type_select = this.data.type_select
       this.checkTypeSelect()
@@ -62,6 +64,7 @@ export default {
     dataChanged() {
       const new_data = {
         index: this.index,
+        id: this.id,
         type_select: this.type_select,
         type_input_text: this.type_input_text,
         rule_select: this.rule_select,

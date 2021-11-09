@@ -12,7 +12,7 @@
           </div>
           <div class="mt-2 ps-3 pt-3 pb-3 border">
             <new-rule v-for="(item, index) in rules"
-                      :key="JSON.stringify(index)" v-on:remove-rule="removeRule(index)"
+                      :key="JSON.stringify(item.id)" v-on:remove-rule="removeRule(index)"
                       :data="item" :index="index" v-on:data-changed="dataChanged"
                       class="mb-2"/>
             <div class="mt-2 add-rule-div">
@@ -51,14 +51,15 @@ export default {
         this.rules = rules
       },
       addRule() {
+        const default_id = this.rules[-1].id + 1;
         const new_rule = {
+          id: default_id,
           type_input_text: null,
           type_input_show: null,
           rule_input_text: null,
           rule_input_show: null,
         }
         this.rules.push(new_rule)
-        console.log(this.rules)
       }
     }
   }
