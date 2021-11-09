@@ -19,6 +19,23 @@
               <button class="btn add-rule-btn" v-on:click="addRule">+</button>
             </div>
           </div>
+          <div class="if-condition container-fluid d-flex flex-row ps-0 mt-3">
+              <span class="text-center me-2 condition rounded">THEN</span>
+              <select class="form-select form-select-sm me-2 then-select" v-model="then_condition">
+                <option value="RETURN">RETURN</option>
+                <option value="SAVE">SAVE TO</option>
+                <option value="NOTIFICATION">SEND NOTIFICATION TO</option>
+              </select>
+              <select v-if="then_condition === 'SAVE'" class="form-select form-select-sm me-2 then-select" v-model="save_condition">
+                <option value="DATABASE">DATABASE</option>
+                <option value="CSV">CSV</option>
+              </select>
+              <select v-if="then_condition === 'NOTIFICATION'" class="form-select form-select-sm me-2 then-select" v-model="noti_condition">
+                <option value="EMAIL">EMAIL</option>
+                <option value="SMS">SMS</option>
+                <option value="WEBHOOK">WEBHOOK</option>
+              </select>
+          </div>
       </div>
   </div>
 </template>
@@ -34,6 +51,9 @@ export default {
   data: function () {
     return {
       if_condition: 'ALL',
+      then_condition: 'RETURN',
+      save_condition: 'DATABASE',
+      noti_condition: 'EMAIL',
       rules: []
     }
   },
@@ -113,6 +133,9 @@ export default {
   }
   .if-condition > .if-select {
     width: 90px;
+  }
+  .if-condition > .then-select {
+    width: 210px;
   }
   .add-rule-div {
     text-align: initial;
