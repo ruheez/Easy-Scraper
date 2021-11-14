@@ -102,15 +102,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .form-select-sm,
-  .form-control {
-      width: 200px;
-  }
-  .remove-rule-btn {
-    background: #212121;
-    color: white;
-    padding-bottom: 1px;
-  }
-</style>

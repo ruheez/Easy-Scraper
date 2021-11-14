@@ -10,7 +10,7 @@
               </select>
               <span>of these filters match</span>
           </div>
-          <div class="mt-2 ps-3 pt-3 pb-3 border">
+          <div class="mt-3 ps-3 pt-3 pb-3 border">
             <new-rule v-for="(item, index) in rules"
                       :key="JSON.stringify(item.id)" v-on:remove-rule="removeRule(index)"
                       :data="item" :index="index" v-on:data-changed="dataChanged"
@@ -36,17 +36,22 @@
                 <option value="WEBHOOK">WEBHOOK</option>
               </select>
           </div>
+          <div v-if="then_condition === 'SAVE'" class="mt-3 ps-3 pt-3 pb-3 border">
+            <save-to-database v-if="save_condition === 'DATABASE'"/>
+          </div>
       </div>
   </div>
 </template>
 
 <script>
-import Rule from '@/components/rule'
+import Rule from '@/components/Rule'
+import SaveToDatabase from "@/components/SaveToDatabase";
 
 export default {
   name: "NewTask",
   components: {
-    'new-rule': Rule
+    'new-rule': Rule,
+    'save-to-database': SaveToDatabase
   },
   data: function () {
     return {
@@ -115,12 +120,28 @@ export default {
 
 <!-- Global CSS -->
 <style>
-  .form-control {
-    height: 27px;
-  }
   .form-select-sm {
     padding-top: 0;
     padding-bottom: 0;
+  }
+</style>
+
+<!-- Style for SaveToDatabase.vue | Rule.vue -->
+<style>
+  .form-select-sm,
+  .form-control {
+      width: 200px;
+  }
+  .form-control {
+    height: 30.8px;
+  }
+  .input-group {
+      width: 500px;
+  }
+  .remove-rule-btn {
+    background: #212121;
+    color: white;
+    padding-bottom: 1px;
   }
 </style>
 
