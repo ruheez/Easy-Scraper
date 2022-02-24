@@ -1,11 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_migrate import Migrate
 
-# Parent imports are different between windows and linux
-try:
-    from .utils.database import db
-except ImportError:
-    from utils.database import db
+from utils.database import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -17,7 +13,7 @@ migrate = Migrate(app, db)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return 'hi'
 
 
 if __name__ == '__main__':

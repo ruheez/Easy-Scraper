@@ -6,7 +6,7 @@
         <label class="input-group-text" for="database-profile-select">DB Profile</label>
         <!-- #TODO : Add a dropdown to select the database profile -->
         <select class="form-select form-select-sm then-select" id="database-profile-select" v-model="db_profile">
-          <option value="PROFILE1">PROFILE1</option>
+          <option v-for="profile in db_profiles" :value="profile.id" :key="profile.id">{{ profile.name }}</option>
         </select>
       </div>
       <!-- END Database profile selector -->
@@ -79,8 +79,11 @@
     name: "save_to_database",
     data() {
       return {
-        db_profiles: [],
-        db_profile: "PROFILE1",
+        db_profiles: [
+          {'name': 'Local', 'id': 1},
+          {'name': 'Remote', 'id': 2},
+        ],
+        db_profile: "",
         collector_type: "CUSTOM",
         data_type: "TEXT",
       }
@@ -88,7 +91,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .helper-button {
     text-decoration: none;
     color: white;
@@ -100,5 +103,8 @@
   }
   .bg-secondary {
     background-color: #212121 !important;
+  }
+  .input-group {
+      width: 500px;
   }
 </style>

@@ -123,25 +123,7 @@ export default {
   .form-select-sm {
     padding-top: 0;
     padding-bottom: 0;
-  }
-</style>
-
-<!-- Style for SaveToDatabase.vue | Rule.vue -->
-<style>
-  .form-select-sm,
-  .form-control {
-      width: 200px;
-  }
-  .form-control {
-    height: 30.8px;
-  }
-  .input-group {
-      width: 500px;
-  }
-  .remove-rule-btn {
-    background: #212121;
-    color: white;
-    padding-bottom: 1px;
+    width: 200px;
   }
 </style>
 
