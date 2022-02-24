@@ -3,22 +3,23 @@
     <div class="input-group input-group-sm mb-3">
       <!-- Database profile selector -->
       <div class="input-group input-group-sm mb-3">
-        <label class="input-group-text" for="database-profile-select">DB Profile</label>
+        <label class="input-group-text rounded" for="database-profile-select"><span>DB Profile</span></label>
         <!-- #TODO : Add a dropdown to select the database profile -->
-        <select class="form-select form-select-sm then-select" id="database-profile-select" v-model="db_profile">
+        <select class="form-select form-select-sm then-select rounded me-2" id="database-profile-select" v-model="db_profile">
           <option v-for="profile in db_profiles" :value="profile.id" :key="profile.id">{{ profile.name }}</option>
         </select>
+        <button class="btn remove-rule-btn pb-0 pt-0 ps-2 pe-2 rounded">New</button>
       </div>
       <!-- END Database profile selector -->
       <!-- Data selector -->
-      <label class="input-group-text" for="data-select">Data</label>
-      <select class="form-select form-select-sm then-select" id="data-select" v-model="collector_type">
+      <label class="input-group-text rounded" for="data-select"><span>Data</span></label>
+      <select class="form-select form-select-sm then-select rounded" id="data-select" v-model="collector_type">
         <option value="CUSTOM">CUSTOM</option>
         <option value="XPATH">XPATH</option>
         <option value="CLASS">CLASS</option>
         <option value="ID">ID</option>
       </select>
-      <select v-if="collector_type !== 'CUSTOM'" class="form-select form-select-sm then-select" id="data-select" v-model="data_type">
+      <select v-if="collector_type !== 'CUSTOM'" class="form-select form-select-sm then-select rounded" id="data-select" v-model="data_type">
         <option value="TEXT">TEXT</option>
         <option value="HREF">HREF</option>
       </select>
@@ -26,20 +27,20 @@
     <!-- END Data selector -->
     <!-- Input for chosen selector value -->
     <div v-if="collector_type === 'CUSTOM'" class="input-group input-group-sm mb-3">
-      <span class="input-group-text">Value</span>
-      <input type="text" class="form-control" aria-label="Some Random Value">
+      <span class="input-group-text rounded"><span>Value</span></span>
+      <input type="text" class="form-control rounded" aria-label="Some Random Value">
     </div>
     <div v-if="collector_type === 'XPATH'" class="input-group input-group-sm mb-3">
-      <span class="input-group-text">XPath</span>
-      <input type="text" class="form-control" aria-label="/body">
+      <span class="input-group-text rounded"><span>XPath</span></span>
+      <input type="text" class="form-control rounded" aria-label="/body">
     </div>
     <div v-if="collector_type === 'CLASS'" class="input-group input-group-sm mb-3">
-      <span class="input-group-text">Class</span>
-      <input type="text" class="form-control" aria-label="my-favorite-class">
+      <span class="input-group-text rounded"><span>Class</span></span>
+      <input type="text" class="form-control rounded" aria-label="my-favorite-class">
     </div>
     <div v-if="collector_type === 'ID'" class="input-group input-group-sm mb-3">
-      <span class="input-group-text">ID</span>
-      <input type="text" class="form-control" aria-label="this-cool-id">
+      <span class="input-group-text rounded"><span>ID</span></span>
+      <input type="text" class="form-control rounded" aria-label="this-cool-id">
     </div>
     <!-- END Input for chosen selector value -->
     <!--
@@ -83,6 +84,7 @@
           {'name': 'Local', 'id': 1},
           {'name': 'Remote', 'id': 2},
         ],
+        // Dropdown models
         db_profile: "",
         collector_type: "CUSTOM",
         data_type: "TEXT",
@@ -105,6 +107,22 @@
     background-color: #212121 !important;
   }
   .input-group {
-      width: 500px;
+      width: 553px;
+  }
+  .input-group-text {
+    background: #212121;
+    color: white;
+    margin-right: .5rem;
+    width: 82px;
+  }
+  .input-group-text > span {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .remove-rule-btn {
+    background: #212121;
+    color: white;
+    padding-bottom: 1px;
   }
 </style>
