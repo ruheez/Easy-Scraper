@@ -21,7 +21,6 @@ import type { Elements, FlowEvents, VueFlowStore } from "@braks/vue-flow";
 import {
   Background,
   Controls,
-  MiniMap,
   VueFlow,
   addEdge,
   isNode,
@@ -32,7 +31,7 @@ import "@braks/vue-flow/dist/theme-default.css";
 
 export default defineComponent({
   name: "NewFlow",
-  components: { VueFlow, Background, MiniMap, Controls },
+  components: { VueFlow, Background, Controls },
   data() {
     return {
       instance: null as VueFlowStore | null,
