@@ -1,27 +1,32 @@
 <template>
-  <div class="flex-container">
-    <div class="flex-child">
-      <div
-        class="vue-flow__node-input"
-        :draggable="true"
-        @dragstart="ondragstart($event, 'input')"
-      >
-        Input Node
+  <div>
+    <v-navigation-drawer app permanent class="text-center">
+      <h1 class="mt-3">Nodes</h1>
+      <v-list class="nodes">
+        <v-list-item>
+          <DrawerNode name="Get Url" type="default" />
+          <DrawerNode name="Get Element" type="default" />
+          <DrawerNode name="If" type="default" />
+          <DrawerNode name="Save" type="default" />
+          <DrawerNode name="End" type="output" />
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-container class="pa-0">
+      <div @drop="onDrop">
+        <VueFlow
+          v-model="elements"
+          :default-zoom="1"
+          :min-zoom="0.2"
+          :max-zoom="4"
+          @connect="onConnect"
+          @dragover="onDragOver"
+        >
+          <Background />
+          <Controls />
+        </VueFlow>
       </div>
-    </div>
-    <div class="flex-child" @drop="onDrop">
-      <VueFlow
-        v-model="elements"
-        :default-zoom="0.7"
-        :min-zoom="0.2"
-        :max-zoom="4"
-        @connect="onConnect"
-        @dragover="onDragOver"
-      >
-        <Background />
-        <Controls />
-      </VueFlow>
-    </div>
+    </v-container>
   </div>
 </template>
 
@@ -29,69 +34,59 @@
 import { defineComponent } from "vue";
 import type { Elements, FlowEvents, VueFlowStore } from "@braks/vue-flow";
 import { Background, Controls, VueFlow, addEdge } from "@braks/vue-flow";
-
-// Local Imports
-import FlowSidebar from "@/components/FlowSidebar.vue";
+import DrawerNode from "../components/DrawerNode.vue";
 
 import "@braks/vue-flow/dist/style.css";
 import "@braks/vue-flow/dist/theme-default.css";
 
 export default defineComponent({
   name: "NewFlow",
-  components: { VueFlow, Background, Controls, FlowSidebar },
+  components: { VueFlow, Background, Controls, DrawerNode },
   data() {
     return {
       instance: null as VueFlowStore | null,
-      elements: [
-        {
-          id: "1",
-          type: "input",
-          label: "Node 1",
-          position: { x: 250, y: 5 },
-          class: "light",
-        },
-        {
-          id: "2",
-          label: "Node 2",
-          position: { x: 100, y: 100 },
-          class: "light",
-        },
-        {
-          id: "3",
-          label: "Node 3",
-          position: { x: 400, y: 100 },
-          class: "light",
-        },
-        {
-          id: "-4",
-          label: "Node -4",
-          position: { x: 400, y: 200 },
-          class: "light",
-        },
-        { id: "e1-2", source: "1", target: "2", animated: true },
-        { id: "e1-3", source: "1", target: "3", animated: true },
-        { id: "e1-4", source: "1", target: "-4", animated: true },
-      ] as Elements,
+      elements: [] as Elements,
+      // Nodes loaded from DB have positive id but ones generated on client side have negative ids
+      last_node_id: 0,
     };
   },
+  mounted() {
+    this.setupNewFlow();
+  },
   methods: {
+    // Add edges on VueFlow load
     onConnect(params: FlowEvents["connect"]) {
       addEdge(params, this.elements);
     },
-    osDragStart(e, nodeType) {
-      if (e.dataTransfer) {
-        e.dataTransfer.setData("application/vueflow", nodeType);
-        e.dataTransfer.effectAllowed = "move";
-      }
+    // Creates a start node centered on the canvas
+    setupNewFlow() {
+      const drawer = document.getElementsByClassName("v-navigation-drawer")[0];
+      const drawerWidth = drawer.style.width.replace("px", "");
+      const windowWidth = document.documentElement.clientWidth;
+      const position = { x: (windowWidth - drawerWidth) / 2 - 75, y: 50 };
+      const startNode = {
+        id: "0",
+        type: "input",
+        label: "Start",
+        position,
+      };
+      this.elements.push(startNode);
     },
+    //
+    getID() {
+      this.last_node_id -= 1;
+      return JSON.stringify(this.last_node_id);
+    },
+    // Handle dragging from Node Menu to VueFlow
     onDrop(e) {
-      const type = e.dataTransfer?.getData("application/vueflow");
-      const position = { x: e.clientX - 40, y: e.clientY - 18 };
+      const type = e.dataTransfer?.getData("application/vueflow/type");
+      const label = e.dataTransfer?.getData("application/vueflow/label");
+      const position = { x: e.clientX, y: e.clientY };
       const newNode = {
-        id: "-1",
+        id: this.getID(),
         type,
         position,
-        label: "test",
+        label,
       };
       this.elements.push(newNode);
     },
@@ -105,25 +100,10 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.flex-container {
-  display: flex;
-}
-
-.flex-child {
-  border: 2px solid yellow;
-}
-
-.flex-child:first-child {
-  flex: 0.2;
-  margin-right: 20px;
-}
-.flex-child:last-child {
-  flex: 0.8;
-}
+<style scoped>
 .vue-flow {
-  width: 50vw;
-  height: 50vh;
+  width: 100%;
+  height: calc(100vh - 64px);
 }
 .node-actions {
   position: absolute;
@@ -131,17 +111,11 @@ export default defineComponent({
   top: 10px;
   z-index: 4;
 }
-.vue-flow__node {
-  background-color: #3aa675;
-
-  border: 0;
-  border-radius: 0.5rem;
-
-  font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.75rem;
-  color: white;
-
-  padding: 0.5rem;
+.nodes .node {
+  position: relative;
+  margin-bottom: 10px;
+  cursor: grab;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
